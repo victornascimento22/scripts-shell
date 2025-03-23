@@ -9,16 +9,16 @@ E-MAIL="put your email here"
 
 
 if [ ! -f "$SSH_KEY_PATH" ]; then
-    echo "Chave não encontrada, gerando nova chave..."
+    echo "no key found, generating new key"
     ssh-keygen -t rsa -b 4096 -C "$E-MAIL" -f "$HOME/.ssh/id_rsa" -N ""
 else
-    echo "Chave já existe."
+    echo "key exists"
 fi
 
 
 SSH_KEY=$(cat "$SSH_KEY_PATH")
 
-echo "Enviando chave SSH para o GitLab..."
+echo "send ssh key to gitlab"
 
 
 RESPONSE=$(curl --silent --request POST \
@@ -27,11 +27,25 @@ RESPONSE=$(curl --silent --request POST \
     --data-urlencode "key=$SSH_KEY" \
     "$GITLAB_API_URL")
 
+    "$GITLAB_API_URL")
+
 
 if echo "$RESPONSE" | grep -q '"id":'; then
-    echo "Chave SSH adicionada com sucesso ao GitLab!"
+    echo "ssh key added on gitlab"
 else
-    echo "Falha ao adicionar chave SSH ao GitLab. Resposta da API:"
+    echo "error, api response:"
+    echo "$RESPONSE"
+fi
+
+#final check
+
+ssh -T git@gitlab.com
+
+
+if echo "$RESPONSE" | grep -q '"id":'; then
+    echo "ssh key added on gitlab"
+else
+    echo "error, api response:"
     echo "$RESPONSE"
 fi
 
