@@ -27,9 +27,6 @@ RESPONSE=$(curl --silent --request POST \
     --data-urlencode "key=$SSH_KEY" \
     "$GITLAB_API_URL")
 
-    "$GITLAB_API_URL")
-
-
 if echo "$RESPONSE" | grep -q '"id":'; then
     echo "ssh key added on gitlab"
 else
