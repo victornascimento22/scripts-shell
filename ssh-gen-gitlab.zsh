@@ -38,14 +38,3 @@ fi
 
 ssh -T git@gitlab.com
 
-
-if echo "$RESPONSE" | grep -q '"id":'; then
-    echo "ssh key added on gitlab"
-else
-    echo "error, api response:"
-    echo "$RESPONSE"
-fi
-
-#final check
-
-ssh -T git@gitlab.com
